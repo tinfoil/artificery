@@ -23,7 +23,7 @@ defmodule Artificery.Console do
       # exit the test process instead.
       exit({:halt, code})
     else
-      System.halt(code)
+      System.stop(code)
     end
   end
 
