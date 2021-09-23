@@ -5,23 +5,8 @@ defmodule Artificery.Entry do
   """
 
   @doc false
+
   defmacro __before_compile__(_env) do
-    # Are we building an escript?
-    escript? =
-      :init.get_plain_arguments()
-      |> Enum.map(&List.to_string/1)
-      |> Enum.any?(fn
-        "escript.build" -> true
-        _ -> false
-      end)
-
-    script_name =
-      if escript? do
-        Mix.Local.name_for(:escripts, Mix.Project.config())
-      else
-        "elixir -e \"#{__CALLER__.module}.main\" -- "
-      end
-
     quote location: :keep do
       alias Artificery.{Console, Command}
 
@@ -324,13 +309,10 @@ defmodule Artificery.Entry do
       defp print_help([]) do
         # Print global help
 
-        # Header
-        IO.write("#{script_name()} - A release utility tool\n\n")
-
         IO.write([
           "USAGE",
           ?\n,
-          "  $ #{unquote(script_name)} [global_options] <command> [options..] [args..]",
+          "  $ #{script_name()} [global_options] <command> [options..] [args..]",
           ?\n,
           ?\n
         ])
@@ -411,13 +393,13 @@ defmodule Artificery.Entry do
           IO.write([
             "USAGE",
             ?\n,
-            "  $ #{unquote(script_name)} #{full_command_name} [options..] [args..]\n\n"
+            "  $ #{script_name()} #{full_command_name} [options..] [args..]\n\n"
           ])
         else
           IO.write([
             "USAGE",
             ?\n,
-            "  $ #{unquote(script_name)} #{full_command_name} [options..]\n\n"
+            "  $ #{script_name()} #{full_command_name} [options..]\n\n"
           ])
         end
 
@@ -465,10 +447,11 @@ defmodule Artificery.Entry do
           arguments = format_arguments(cmd.arguments)
           {arg_width, help_width} = column_widths(arguments)
 
-          for {arg, help} <- arguments do
+
+          Enum.each(arguments, fn {arg, help} ->
             IO.write([arg, String.duplicate(" ", max(arg_width - byte_size(arg) + 2, 2))])
             print_help_lines(help, arg_width + 2)
-          end
+          end)
         end
 
         Console.halt(1)
@@ -484,7 +467,7 @@ defmodule Artificery.Entry do
             Enum.reverse(acc)
 
           %{subcommands: subcommands} = cmd ->
-            {_, new_argv, _} = OptionParser.parse_head(argv, [])
+            {_, new_argv, _} = OptionParser.parse_head(argv, [strict: false, switches: []])
             extract_command_path(subcommands, new_argv, [command_name | acc])
         end
       end
@@ -503,9 +486,7 @@ defmodule Artificery.Entry do
       end
 
       defp format_arguments(args) do
-        for {name, opt} <- args do
-          {"    #{name}", opt.help || ""}
-        end
+        Enum.map(args, fn arg -> {"    #{arg.name}", arg.help} end)
       end
 
       defp format_flags(flags) do
