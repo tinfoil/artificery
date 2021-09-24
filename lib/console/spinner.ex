@@ -91,7 +91,7 @@ defmodule Artificery.Console.Spinner do
       interval: Keyword.get(opts, :interval, spinner.interval || 100),
       frame_count: length(spinner.frames),
       frame_index: 0,
-      enabled: enabled?(opts),
+      enabled: enabled?(),
     }
     {:ok, data}
   end
@@ -187,10 +187,9 @@ defmodule Artificery.Console.Spinner do
     end
   end
 
-  defp enabled?(opts) do
+  defp enabled? do
     supported? = Artificery.Console.Color.supports_color?
-    stream = Keyword.get(opts, :stream, :standard_error)
-    isatty? = stream in [:stdio, :standard_error]
+    isatty? = Application.get_env(:elixir, :is_tty?, true)
     supported? and isatty?
   end
 end
