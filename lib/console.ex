@@ -16,14 +16,14 @@ defmodule Artificery.Console do
   @spec halt(non_neg_integer) :: :ok | no_return
   def halt(code)
 
-  def halt(0), do: System.stop(0)
+  def halt(0), do: System.halt(0)
   def halt(code) when code > 0 do
     if Application.get_env(:artificery, :no_halt, false) do
       # During tests we don't want to kill the node process,
       # exit the test process instead.
       exit({:halt, code})
     else
-      System.stop(code)
+      System.halt(code)
     end
   end
 
