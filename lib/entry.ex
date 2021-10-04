@@ -33,8 +33,6 @@ defmodule Artificery.Entry do
         Console.init()
 
         parse_args(argv)
-
-        Console.halt(0)
       end
 
       def parse_args(argv) do
