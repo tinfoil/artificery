@@ -11,23 +11,6 @@ defmodule Artificery.Console do
   #@erase_down @esc <> "J"
 
   @doc """
-  Terminates the process with the given status code.
-  """
-  @spec halt(non_neg_integer) :: no_return()
-  def halt(code)
-
-  def halt(0), do: System.halt(0)
-  def halt(code) when code > 0 do
-    if Application.get_env(:artificery, :no_halt, false) do
-      # During tests we don't want to kill the node process,
-      # exit the test process instead.
-      exit({:halt, code})
-    else
-      System.halt(code)
-    end
-  end
-
-  @doc """
   Updates the logger configuration with the given options.
   """
   @spec configure(Keyword.t()) :: Keyword.t()
