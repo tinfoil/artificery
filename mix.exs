@@ -15,8 +15,7 @@ defmodule Artificery.MixProject do
       package: package(),
       preferred_cli_env: [
         docs: :docs,
-        "hex.publish": :docs,
-        "eqc.install": :test
+        "hex.publish": :docs
       ]
     ]
   end
@@ -27,8 +26,7 @@ defmodule Artificery.MixProject do
 
   defp deps do
     [
-      {:ex_doc, ">= 0.0.0", only: [:docs], runtime: false},
-      {:eqc_ex, "~> 1.4", only: [:test], runtime: false}
+      {:ex_doc, ">= 0.0.0", only: [:docs], runtime: false}
     ]
   end
 
