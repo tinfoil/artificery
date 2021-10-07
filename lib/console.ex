@@ -125,14 +125,12 @@ defmodule Artificery.Console do
     do: log(device, :warn, colorize(msg, [:yellow]))
 
   @doc """
-  Prints an error message, and then halts the process.
+  Prints an error message
   """
   @spec error(String.t()) :: no_return
   @spec error(:standard_error | :stdio, String.t()) :: no_return
-  def error(device \\ :stdio, msg) do
-    log(device, :error, colorize(bangify(msg), [:red]))
-    halt(1)
-  end
+  def error(device \\ :stdio, msg),
+    do: log(device, :error, colorize(bangify(msg), [:red]))
 
   @doc """
   Provides a spinner while some long-running work is being done.

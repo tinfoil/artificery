@@ -265,7 +265,7 @@ functions it provides is below:
 - `notice/1`, writes an informational notice to stdout (bright blue)
 - `success/1`, writes a success message to stdout (bright green)
 - `warn/1`, writes a warning to stderr (yellow)
-- `error/1`, writes an error to stderr (red), and also halts/terminates the process with a non-zero exit code
+- `error/1`, writes an error to stderr (red)
 
 In addition to writing messages to the terminal, `Console` also provides a way
 to provide a spinner/loading animation while some long-running work is being
