@@ -13,7 +13,6 @@ defmodule Artificery.MixProject do
       docs: docs(),
       description: description(),
       package: package(),
-      elixirc_paths: elixirc_paths(Mix.env),
       preferred_cli_env: [
         docs: :docs,
         "hex.publish": :docs,
@@ -53,7 +52,4 @@ defmodule Artificery.MixProject do
       }
     ]
   end
-
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
 end
